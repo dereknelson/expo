@@ -33,7 +33,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
-import expo.core.interfaces.Package;
+import org.unimodules.core.interfaces.Package;
 import host.exp.exponent.ABIVersion;
 import host.exp.exponent.Constants;
 import host.exp.exponent.ExponentManifest;
@@ -148,7 +148,7 @@ public abstract class ReactNativeActivity extends FragmentActivity implements co
     mLayout.addView(mContainer);
     mLoadingView = new LoadingView(this);
     if (!Constants.isStandaloneApp() || Constants.SHOW_LOADING_VIEW_IN_SHELL_APP) {
-      mContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+      mContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.splashBackground));
       mLayout.addView(mLoadingView);
     }
 

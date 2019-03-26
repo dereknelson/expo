@@ -5,7 +5,7 @@ import com.facebook.react.ReactPackage;
 import java.util.Arrays;
 import java.util.List;
 
-import expo.core.interfaces.Package;
+import org.unimodules.core.interfaces.Package;
 import expo.loaders.provider.interfaces.AppLoaderPackagesProviderInterface;
 import expo.modules.ads.admob.AdMobPackage;
 import expo.modules.ads.facebook.AdsFacebookPackage;
@@ -15,7 +15,6 @@ import expo.modules.appauth.AppAuthPackage;
 import expo.modules.av.AVPackage;
 import expo.modules.backgroundfetch.BackgroundFetchPackage;
 import expo.modules.barcodescanner.BarCodeScannerPackage;
-import expo.modules.blurview.BlurViewPackage;
 import expo.modules.brightness.BrightnessPackage;
 import expo.modules.calendar.CalendarPackage;
 import expo.modules.camera.CameraPackage;
@@ -28,8 +27,10 @@ import expo.modules.filesystem.FileSystemPackage;
 import expo.modules.font.FontLoaderPackage;
 import expo.modules.gl.GLPackage;
 import expo.modules.google.signin.GoogleSignInPackage;
+import expo.modules.haptics.HapticsPackage;
 import expo.modules.imagemanipulator.ImageManipulatorPackage;
 import expo.modules.imagepicker.ImagePickerPackage;
+import expo.modules.intentlauncher.IntentLauncherPackage;
 import expo.modules.keepawake.KeepAwakePackage;
 import expo.modules.lineargradient.LinearGradientPackage;
 import expo.modules.localauthentication.LocalAuthenticationPackage;
@@ -41,12 +42,13 @@ import expo.modules.permissions.PermissionsPackage;
 import expo.modules.print.PrintPackage;
 import expo.modules.securestore.SecureStorePackage;
 import expo.modules.sensors.SensorsPackage;
+import expo.modules.sharing.SharingPackage;
 import expo.modules.sms.SMSPackage;
 import expo.modules.speech.SpeechPackage;
 import expo.modules.sqlite.SQLitePackage;
 import expo.modules.taskManager.TaskManagerPackage;
 import expo.modules.webbrowser.WebBrowserPackage;
-import expolib_v1.okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
@@ -78,7 +80,6 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
         new AmplitudePackage(),
         new BackgroundFetchPackage(),
         new BarCodeScannerPackage(),
-        new BlurViewPackage(),
         new BrightnessPackage(),
         new CalendarPackage(),
         new CameraPackage(),
@@ -91,8 +92,10 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
         new FontLoaderPackage(),
         new GLPackage(),
         new GoogleSignInPackage(),
+        new HapticsPackage(),
         new ImageManipulatorPackage(),
         new ImagePickerPackage(),
+        new IntentLauncherPackage(),
         new KeepAwakePackage(),
         new LinearGradientPackage(),
         new LocalAuthenticationPackage(),
@@ -107,6 +110,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
         new SecureStorePackage(),
         new SegmentPackage(),
         new SensorsPackage(),
+        new SharingPackage(),
         new SpeechPackage(),
         new TaskManagerPackage(),
         new WebBrowserPackage()
@@ -122,4 +126,5 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
     // Customize/override OkHttp client here
     return builder;
   }
+
 }

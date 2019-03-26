@@ -1,4 +1,4 @@
-import { Platform } from 'expo-core';
+import { Platform } from '@unimodules/core';
 import { SharedEventEmitter, INTERNALS, ModuleBase } from 'expo-firebase-app';
 import ConfirmationResult from './phone/ConfirmationResult';
 import PhoneAuthListener from './phone/PhoneAuthListener';
@@ -12,9 +12,6 @@ import TwitterAuthProvider from './providers/TwitterAuthProvider';
 import User from './User';
 import AuthSettings from './AuthSettings';
 const isAndroid = Platform.OS === 'android';
-const isBoolean = (value) => {
-    return typeof value === 'boolean';
-};
 const NATIVE_EVENTS = {
     authStateChanged: 'Expo.Firebase.auth_state_changed',
     authIdTokenChanged: 'Expo.Firebase.auth_id_token_changed',

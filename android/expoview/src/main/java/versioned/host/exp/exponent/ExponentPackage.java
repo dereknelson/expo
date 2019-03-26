@@ -12,6 +12,9 @@ import com.facebook.react.uimanager.ViewManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.unimodules.adapters.react.ReactModuleRegistryProvider;
+import org.unimodules.core.interfaces.Package;
+import org.unimodules.core.interfaces.SingletonModule;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -22,16 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import expo.adapters.react.ReactModuleRegistryProvider;
-import expo.core.interfaces.Package;
-import expo.core.interfaces.SingletonModule;
 import host.exp.exponent.ExponentManifest;
 import host.exp.exponent.analytics.EXL;
 import host.exp.exponent.kernel.ExperienceId;
 import host.exp.exponent.kernel.ExponentKernelModuleProvider;
 import host.exp.exponent.utils.ScopedContext;
 import versioned.host.exp.exponent.modules.api.ErrorRecoveryModule;
-import versioned.host.exp.exponent.modules.api.IntentLauncherModule;
 import versioned.host.exp.exponent.modules.api.KeyboardModule;
 import versioned.host.exp.exponent.modules.api.PedometerModule;
 import versioned.host.exp.exponent.modules.api.ScreenOrientationModule;
@@ -45,6 +44,9 @@ import versioned.host.exp.exponent.modules.api.components.gesturehandler.react.R
 import versioned.host.exp.exponent.modules.api.components.lottie.LottiePackage;
 import versioned.host.exp.exponent.modules.api.components.maps.MapsPackage;
 import versioned.host.exp.exponent.modules.api.components.svg.SvgPackage;
+import versioned.host.exp.exponent.modules.api.components.webview.RNCWebViewModule;
+import versioned.host.exp.exponent.modules.api.components.webview.RNCWebViewPackage;
+import versioned.host.exp.exponent.modules.api.netinfo.NetInfoModule;
 import versioned.host.exp.exponent.modules.api.notifications.NotificationsModule;
 import versioned.host.exp.exponent.modules.api.reanimated.ReanimatedModule;
 import versioned.host.exp.exponent.modules.api.screens.RNScreensPackage;
@@ -125,7 +127,7 @@ public class ExponentPackage implements ReactPackage {
       // which are going to be deallocated in a tick, but there's no better solution
       // without a bigger-than-minimal refactor. In SDK32 the only singleton module
       // is TaskService which is safe to initialize more than once.
-      List<SingletonModule> packageSingletonModules = expoPackage.createSingletonModules(context);
+      List<? extends SingletonModule> packageSingletonModules = expoPackage.createSingletonModules(context);
       for (SingletonModule singletonModule : packageSingletonModules) {
         if (!sSingletonModulesClasses.contains(singletonModule.getClass())) {
           sSingletonModules.add(singletonModule);
@@ -168,13 +170,13 @@ public class ExponentPackage implements ReactPackage {
         nativeModules.add(new PedometerModule(reactContext));
         nativeModules.add(new RNBranchModule(reactContext));
         nativeModules.add(new ErrorRecoveryModule(reactContext, experienceId));
-        nativeModules.add(new IntentLauncherModule(reactContext));
         nativeModules.add(new ScreenOrientationModule(reactContext));
         nativeModules.add(new RNGestureHandlerModule(reactContext));
         nativeModules.add(new RNAWSCognitoModule(reactContext));
         nativeModules.add(new ReanimatedModule(reactContext));
         nativeModules.add(new SplashScreenModule(reactContext, experienceId));
-
+        nativeModules.add(new RNCWebViewModule(reactContext));
+        nativeModules.add(new NetInfoModule(reactContext));
         SvgPackage svgPackage = new SvgPackage();
         nativeModules.addAll(svgPackage.createNativeModules(reactContext));
 
@@ -202,7 +204,8 @@ public class ExponentPackage implements ReactPackage {
         new MapsPackage(),
         new LottiePackage(),
         new RNGestureHandlerPackage(),
-        new RNScreensPackage()
+        new RNScreensPackage(),
+        new RNCWebViewPackage()
     ));
 
     viewManagers.addAll(mModuleRegistryAdapter.createViewManagers(reactContext));

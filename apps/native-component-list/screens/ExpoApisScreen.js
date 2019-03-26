@@ -2,12 +2,17 @@ import React from 'react';
 import { Alert, Platform } from 'react-native';
 import { DangerZone, Notifications } from 'expo';
 import ComponentListScreen from './ComponentListScreen';
+import { Screens } from '../navigation/ExpoApis';
 
-DangerZone.Branch.subscribe(bundle => {
-  if (bundle && bundle.params && !bundle.error) {
-    Alert.alert('Opened Branch link', JSON.stringify(bundle.params, null, 2));
-  }
-});
+try {
+  DangerZone.Branch.subscribe(bundle => {
+    if (bundle && bundle.params && !bundle.error) {
+      Alert.alert('Opened Branch link', JSON.stringify(bundle.params, null, 2));
+    }
+  });
+} catch (e) {
+  // Branch is not available, do nothing
+}
 
 export default class ExpoApisScreen extends React.Component {
   static path = '';
@@ -66,78 +71,62 @@ export default class ExpoApisScreen extends React.Component {
   }
 
   _getApis = () => {
-    return Platform.select({
-      web: [
-        'ActionSheet',
-        'Audio',
-        'AuthSession',
-        'Constants',
-        'DocumentPicker',
-        'FileSystem',
-        'Font',
-        'Geocoding',
-        'Google',
-        'GoogleSignIn',
-        'ImageManipulator',
-        'ImagePicker',
-        'Linking',
-        'Localization',
-        'Location',
-        'MailComposer',
-        'Notification',
-        'Permissions',
-        'Print',
-        'ScreenOrientation',
-        'Sensor',
-        'SMS',
-        'TextToSpeech',
-        'Util',
-        'ViewShot',
-      ],
-      default: [
-        'ActionSheet',
-        'AppAuth',
-        'Audio',
-        'AuthSession',
-        'BackgroundFetch',
-        'Branch',
-        'Calendars',
-        'Constants',
-        'Contacts',
-        'DocumentPicker',
-        'FacebookLogin',
-        'FileSystem',
-        'Font',
-        'Geocoding',
-        'Google',
-        'GoogleSignIn',
-        'Haptic',
-        'ImagePicker',
-        'ImageManipulator',
-        'IntentLauncher',
-        'KeepAwake',
-        'Linking',
-        'LocalAuthentication',
-        'Localization',
-        'Location',
-        'MailComposer',
-        'Notification',
-        'Pedometer',
-        'Permissions',
-        'Print',
-        'MediaLibrary',
-        'Recording',
-        'ScreenOrientation',
-        'Sensor',
-        'SecureStore',
-        'SMS',
-        'StoreReview',
-        'TaskManager',
-        'TextToSpeech',
-        'Util',
-        'WebBrowser',
-        'ViewShot',
-      ],
-    });
+    const screens = [
+      'Accelerometer',
+      'ActionSheet',
+      'AppAuth',
+      'Audio',
+      'AuthSession',
+      'BackgroundFetch',
+      'Branch',
+      'Calendars',
+      'Constants',
+      'Contacts',
+      'DocumentPicker',
+      'FacebookLogin',
+      'FileSystem',
+      'Font',
+      'Geocoding',
+      'Google',
+      'GoogleSignIn',
+      'Haptics',
+      'ImagePicker',
+      'ImageManipulator',
+      'IntentLauncher',
+      'KeepAwake',
+      'Linking',
+      'LocalAuthentication',
+      'Localization',
+      'Location',
+      'MailComposer',
+      'NetInfo',
+      'Notification',
+      'Pedometer',
+      'Permissions',
+      'Print',
+      'MediaLibrary',
+      'Recording',
+      'ScreenOrientation',
+      'Sensor',
+      'SecureStore',
+      'Sharing',
+      'SMS',
+      'StoreReview',
+      'TaskManager',
+      'TextToSpeech',
+      'WebBrowser',
+      'ViewShot',
+    ];
+    return screens
+      .map(name => ({ name, isAvailable: !!Screens[name] }))
+      .sort((a, b) => {
+        if (a.isAvailable !== b.isAvailable) {
+          if (a.isAvailable) {
+            return -1;
+          }
+          return 1;
+        }
+        return 0;
+      });
   };
 }

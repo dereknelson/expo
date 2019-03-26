@@ -2,6 +2,7 @@
 package expo.modules.filesystem;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,14 +33,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import expo.core.ExportedModule;
-import expo.core.interfaces.ExpoMethod;
-import expo.core.ModuleRegistry;
-import expo.core.interfaces.ModuleRegistryConsumer;
-import expo.core.Promise;
-import expo.core.interfaces.services.EventEmitter;
-import expo.interfaces.filesystem.FilePermissionModuleInterface;
-import expo.interfaces.filesystem.Permission;
+import org.unimodules.core.ExportedModule;
+import org.unimodules.core.interfaces.ExpoMethod;
+import org.unimodules.core.ModuleRegistry;
+import org.unimodules.core.interfaces.ModuleRegistryConsumer;
+import org.unimodules.core.Promise;
+import org.unimodules.core.interfaces.services.EventEmitter;
+import org.unimodules.interfaces.filesystem.FilePermissionModuleInterface;
+import org.unimodules.interfaces.filesystem.Permission;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -447,7 +448,27 @@ public class FileSystemModule extends ExportedModule implements ModuleRegistryCo
     try {
       final Uri uri = Uri.parse(uriStr);
       ensurePermission(uri, Permission.WRITE);
-      if ("file".equals(uri.getScheme())) {
+
+      if (!url.contains(":")) {
+        Context context = getContext();
+        Resources resources = context.getResources();
+        String packageName = context.getPackageName();
+        int resourceId = resources.getIdentifier(url, "raw", packageName);
+
+        BufferedSource bufferedSource = Okio.buffer(Okio.source(context.getResources().openRawResource(resourceId)));
+        File file = uriToFile(uri);
+        file.delete();
+        BufferedSink sink = Okio.buffer(Okio.sink(file));
+        sink.writeAll(bufferedSource);
+        sink.close();
+
+        Bundle result = new Bundle();
+        result.putString("uri", Uri.fromFile(file).toString());
+        if (options != null && options.containsKey("md5") && (Boolean) options.get("md5")) {
+          result.putString("md5", md5(file));
+        }
+        promise.resolve(result);
+      } else if ("file".equals(uri.getScheme())) {
         Request request = new Request.Builder().url(url).build();
         getOkHttpClientBuilder().build().newCall(request).enqueue(new Callback() {
           @Override

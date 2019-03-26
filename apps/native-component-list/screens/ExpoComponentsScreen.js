@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import ComponentListScreen from './ComponentListScreen';
 import { Layout } from '../constants';
+import { Screens } from '../navigation/ExpoComponents';
 
 export default class ExpoComponentsScreen extends React.Component {
   static path = '';
@@ -15,39 +16,36 @@ export default class ExpoComponentsScreen extends React.Component {
   }
 
   _getApis = () => {
-    return Platform.select({
-      web: [
-        'AdMob',
-        'BlurView',
-        'Camera',
-        'ImagePreview',
-        'Gif',
-        'GL',
-        'LinearGradient',
-        'Lottie',
-        'Maps',
-        'SVG',
-        'Video',
-      ],
-      default: [
-        'AdMob',
-        'BarCodeScanner',
-        'BlurView',
-        'Camera',
-        'FacebookAds',
-        'GestureHandlerList',
-        'GestureHandlerPinch',
-        'GestureHandlerSwipeable',
-        'ImagePreview',
-        'Gif',
-        'GL',
-        'LinearGradient',
-        'Lottie',
-        'Maps',
-        'Screens',
-        'SVG',
-        'Video',
-      ],
-    });
+    const screens = [
+      'AdMob',
+      'BarCodeScanner',
+      'BlurView',
+      'Camera',
+      'FacebookAds',
+      'GestureHandlerList',
+      'GestureHandlerPinch',
+      'GestureHandlerSwipeable',
+      'ImagePreview',
+      'Gif',
+      'GL',
+      'LinearGradient',
+      'Lottie',
+      'Maps',
+      'Screens',
+      'SVG',
+      'Video',
+      'WebView',
+    ];
+    return screens
+      .map(name => ({ name, isAvailable: !!Screens[name] }))
+      .sort((a, b) => {
+        if (a.isAvailable !== b.isAvailable) {
+          if (a.isAvailable) {
+            return -1;
+          }
+          return 1;
+        }
+        return 0;
+      });
   };
 }

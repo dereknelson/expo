@@ -2,10 +2,6 @@
 title: Payments
 ---
 
-import withDocumentationElements from '~/components/page-higher-order/withDocumentationElements';
-
-export default withDocumentationElements(meta);
-
 Expo includes support for payments through [Stripe](https://stripe.com/) and [Apple Pay](https://www.apple.com/apple-pay/) on iOS via ExpoKit, and Stripe on Android (plus Android Pay via ExpoKit).
 
 Need more help than what's on the page? The Payments module is largely based off [tipsi-stripe](https://github.com/tipsi/tipsi-stripe). The documentation and questions there may prove helpful.
@@ -130,7 +126,7 @@ Add the following code to your `AndroidManifest.xml`, replacing `your_scheme` wi
       ...
 ```
 
-If you have problems with this step just look at `AndroidManifest.xml` in one of our [examples](https://github.com/expo/expo-payments-stripe/tree/master/examples). Remember to use the same scheme as the one which was set in `Info.plist` file (only if you are also developing app for iOS).
+If you have problems with this step just look at `AndroidManifest.xml` in one of our [examples](https://github.com/expo/expo/tree/master/packages/expo-payments-stripe/examples). Remember to use the same scheme as the one which was set in `Info.plist` file (only if you are also developing app for iOS).
 
 ## Importing Payments
 
@@ -225,11 +221,10 @@ Launch `Add Card` view to to accept payment.
 
 **options.prefilledInformation** — An object with the following keys:
 
-| Key            | Type   | Description                                                                              |
-| :------------- | :----- | :--------------------------------------------------------------------------------------- |
-| email          | String | The user’s email address                                                                 |
-| phone          | String | The user’s phone number                                                                  |
-| billingAddress | Object | The user’s billing address. When set, the add card form will be filled with this address |
+|       Key       |  Type  | Description                                                                                                                                                                             |
+|:---------------:|:------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shippingAddress | Object | The user’s shipping address. When set, the shipping address form will be filled with this address. The user will also have the option to fill their billing address using this address. |
+|  billingAddress | Object | The user’s billing address. When set, the "add card" form will be filled with this address. The user will also have the option to fill their shipping address using this address.          |
 
 **options.prefilledInformation.billingAddress** — An object with the following keys:
 

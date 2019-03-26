@@ -1,10 +1,11 @@
 self: super:
 
 {
-  xcpretty = assert !(builtins.hasAttr "xcpretty" super); super.bundlerApp {
-    pname = "xcpretty";
-    gemdir = ./xcpretty;
-    exes = [ "xcpretty" ];
+  # TODO: Delete this after removing `native_target` usage from xdl podfile template
+  cocoapods = super.bundlerApp {
+    pname = "cocoapods";
+    gemdir = ./cocoapods;
+    exes = [ "pod" ];
   };
 
   nodejs = super.nodejs-10_x;
@@ -18,33 +19,6 @@ self: super:
 
   yarn2nix = import self.yarn2nix-src { pkgs = self; };
 
-  externalNodePackages =
-    let
-      generatedNodePackages = super.callPackage ./nodepackages { pkgs = self; };
-    in
-      generatedNodePackages // {
-        expo-cli = generatedNodePackages.expo-cli.override {
-          nativeBuildInputs = [ self.makeWrapper ];
-          postInstall = ''
-            for p in $out/bin/expo{,-cli}; do
-              wrapProgram $p --prefix PATH : ${self.procps}/bin
-            done
-          '';
-          preFixup = super.lib.optionalString super.stdenv.isDarwin ''
-            detach="$out/lib/node_modules/expo-cli/node_modules/xdl/build/detach"
-            substituteInPlace "$detach/IosShellApp.js" --replace xcpretty ${self.xcpretty}/bin/xcpretty
-            substituteInPlace "$detach/IosShellApp.js" --replace "'pod'" "'${self.cocoapods}/bin/pod'"
-            for f in Ios{CodeSigning,Keychain}.js; do
-              substituteInPlace "$detach/$f" --replace "'fastlane'" "'${self.fastlane}/bin/fastlane'"
-            done
-         '';
-        };
-      };
-
-  inherit (self.externalNodePackages)
-    expo-cli
-    ;
-  
   expotools = self.yarn2nix.mkYarnPackage {
     src = self.lib.sourceByExcludingRegex ../tools/expotools ["build" "node_modules"];
 

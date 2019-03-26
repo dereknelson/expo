@@ -2,10 +2,6 @@
 title: Publishing
 ---
 
-import withDocumentationElements from '~/components/page-higher-order/withDocumentationElements';
-
-export default withDocumentationElements(meta);
-
 While you’re developing your project, you’re writing code on your
 computer, and when you use Expo CLI, a server and the React Native
 packager run on your machine and bundle up all your source code and make
@@ -57,6 +53,10 @@ is similar to [CodePush](https://microsoft.github.io/code-push/), but it
 is built into Expo so you don't need to install anything.
 
 To configure the way your app handles JS updates, see [Offline Support](../../guides/offline-support/).
+
+## Uploading Assets to the CDN
+
+In order for assets to be uploaded to the CDN, they must be explicitly required somewhere in your application's code. Conditionally requiring assets will result in the packager being unable to detect them and therefore they will not be uploaded when you publish your project. A great way to ensure your assets will be uploaded is to make use of [pre-loading and caching assets](../../guides/preloading-and-caching-assets/).
 
 ## Limitations
 

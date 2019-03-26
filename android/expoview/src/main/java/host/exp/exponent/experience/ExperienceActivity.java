@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
-import expo.core.interfaces.Package;
+import org.unimodules.core.interfaces.Package;
 import host.exp.exponent.ABIVersion;
 import host.exp.exponent.AppLoader;
 import host.exp.exponent.Constants;
@@ -192,7 +192,8 @@ public class ExperienceActivity extends BaseExperienceActivity implements Expone
     }
 
     if (mManifestUrl != null && shouldOpenImmediately) {
-      new AppLoader(mManifestUrl) {
+      boolean forceCache = getIntent().getBooleanExtra(KernelConstants.LOAD_FROM_CACHE_KEY, false);
+      new AppLoader(mManifestUrl, forceCache) {
         @Override
         public void onOptimisticManifest(final JSONObject optimisticManifest) {
           Exponent.getInstance().runOnUiThread(new Runnable() {
