@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { EventEmitter, EventSubscription } from 'fbemitter';
 import invariant from 'invariant';
 import { AsyncStorage, Platform } from 'react-native';
@@ -16,6 +17,7 @@ type LocalNotification = {
   // How should we deal with body being required on iOS but not on Android?
   body?: string;
   data?: any;
+  categoryId?: string;
   ios?: {
     sound?: boolean;
   };
@@ -25,10 +27,6 @@ type LocalNotification = {
     color?: string;
     sticky?: boolean;
     link?: string;
-    // DEPRECATED:
-    sound?: boolean;
-    vibrate?: boolean | number[];
-    priority: string;
   };
 };
 
@@ -194,6 +192,9 @@ export default {
 
   /* Re-export */
   getExpoPushTokenAsync(): Promise<string> {
+    if (!Constants.isDevice) {
+      throw new Error(`Must be on a physical device to get an Expo Push Token`);
+    }
     return ExponentNotifications.getExponentPushTokenAsync();
   },
 
@@ -307,18 +308,10 @@ export default {
         );
       }
 
-      // If iOS, pass time as milliseconds
-      if (Platform.OS === 'ios') {
-        options = {
-          ...options,
-          time: timeAsDateObj.getTime(),
-        };
-      } else {
-        options = {
-          ...options,
-          time: timeAsDateObj,
-        };
-      }
+      options = {
+        ...options,
+        time: timeAsDateObj.getTime(),
+      };
     }
 
     if (options.intervalMs != null && options.repeat != null) {

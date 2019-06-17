@@ -23,6 +23,12 @@ declare -A redirects # associative array variable
 redirects[versions/latest/introduction/installation.html]=versions/latest/introduction/installation/
 # useful link on twitter
 redirects[versions/latest/guides/app-stores.html]=versions/latest/distribution/app-stores/
+# Xdl caches
+redirects[versions/latest/guides/offline-support.html]=versions/latest/guides/offline-support/
+# xdl convert comment
+redirects[versions/latest/sdk/]=versions/latest/sdk/overview/
+# upgrading expo -> upgrading sdk walkthrough
+redirects[versions/latest/workflow/upgrading-expo]=versions/latest/workflow/upgrading-expo-sdk-walkthrough/
 
 for i in "${!redirects[@]}" # iterate over keys
 do

@@ -247,7 +247,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
       throw new AudioFocusNotAcquiredException("Expo Audio is disabled, so audio focus could not be acquired.");
     }
 
-    if (mAppIsPaused) {
+    if (mAppIsPaused && !mStaysActiveInBackground) {
       throw new AudioFocusNotAcquiredException("This experience is currently in the background, so audio focus could not be acquired.");
     }
 
@@ -500,7 +500,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
   // Recording API
 
   private boolean isMissingAudioRecordingPermissions() {
-    return mModuleRegistry.getModule(Permissions.class).getPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+    return mModuleRegistry.getModule(Permissions.class).getPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
   }
 
   // Rejects the promise and returns false if the MediaRecorder is not found.
